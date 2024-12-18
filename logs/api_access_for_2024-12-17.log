@@ -1,0 +1,2 @@
+{"timestamp":"2024-12-17 15:24:09","method":"POST","path":"\/api.php\/auth\/login","status":200,"api_key":"test-key-1","ip":"::1"}
+{"timestamp":"2024-12-17 15:40:58","method":"POST","path":"\/api.php\/auth\/login","status":200,"api_key":"test-key-1","ip":"::1"}

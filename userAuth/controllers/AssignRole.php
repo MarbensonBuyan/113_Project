@@ -57,7 +57,6 @@ $request = json_decode(file_get_contents('php://input'), true);
 // Validate input data
 $email = $request['email'] ?? null;
 $role_id = $request['role_id'] ?? null;
-
 if (!$email || !$role_id) {
     http_response_code(400); // Bad Request
     echo json_encode(['status' => 'error', 'message' => 'Email and role ID are required']);

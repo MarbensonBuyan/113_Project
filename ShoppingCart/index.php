@@ -35,6 +35,7 @@ $router->addRoute('POST', '/api/login', fn($params, $data) =>
 // Routes with authorization in Cart
 $router->addRoute('GET', '/api/cart', function($params, $data) use ($cartController) {
     $auth = AuthMiddleware::authorize();
+    echo json_encode($auth->user_id);
     return $cartController->viewCart($auth->user_id);
 });
 

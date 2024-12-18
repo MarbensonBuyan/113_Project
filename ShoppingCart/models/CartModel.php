@@ -11,15 +11,16 @@ class CartModel {
 
     // Get cart by user ID
     public function getCartByUserId($user_id) {
-        $query = "SELECT cart.cart_id, 
-                         cart_item.product_id, 
-                         product.product_name, 
-                         SUM(cart_item.quantity) AS quantity, 
-                         product.price
-                  FROM cart_items AS cart_item
-                  JOIN products AS product ON cart_item.product_id = product.product_id
-                  JOIN (SELECT cart_id FROM carts WHERE user_id = ?) AS cart ON cart_item.cart_id = cart.cart_id
-                  GROUP BY cart_item.product_id";
+        $query = "SELECT 
+    cart.cart_id, 
+    cart_item.product_id, 
+    product.product_name, 
+    SUM(cart_item.quantity) AS quantity, 
+    product.price
+                FROM cart_items AS cart_item
+                JOIN products AS product ON cart_item.product_id = product.product_id
+                JOIN (SELECT cart_id FROM shopping_cart WHERE user_id = ?) AS cart ON cart_item.cart_id = cart.cart_id
+                GROUP BY cart.cart_id, cart_item.product_id, product.product_name, product.price";
         
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$user_id]);

@@ -23,28 +23,38 @@ const API_KEYS = [
 
 $microservices = [
     'auth' => [
-        'base_url' => 'http://localhost:8000/api.php',
+        'base_url' => 'http://localhost:8002/api.php',
         'endpoints' => [
             'login' => '/login',
             'register' => '/register',
             'logout' => '/logout',
-            'password_reset' => [
-                'request' => '/password/reset/request',
-                'reset' => '/password/reset'
-            ],
             'profile' => '/profile/{id}',
             'verify' => '/verify-email/{token}',
             'assign_role' => '/role/assign',
             'revoke_role' => '/role/revoke',
         ]
     ],
-    'user' => [
-        'base_url' => 'http://localhost/eshop-fg1/api/user',
-        'endpoints' => [
-            'cart' => '/cart',
-            'profile' => '/profile/update/{id}'
-        ]
+    'admin_stuff' => [
+        'base_url' => 'http://localhost:8002/controllers',
     ],
+    'list_role' => [
+        'base_url' => 'http://localhost:8002/auth',
+    ],
+    'password' => [
+        'base_url' => 'http://localhost:8002/password',
+    ],
+    'shopping' => [
+        'base_url' => 'http://localhost:8003/api',
+    ],
+    'buyer-products' => [
+        'base_url' => 'http://localhost:8001/api/buyer-products',
+    ],
+    'seller-products' => [
+        'base_url' => 'http://localhost:8001/api/seller-products',
+    ],
+    'visitor-products' => [
+        'base_url' => 'http://localhost:8001/api/visitor-products',
+    ]
 ];
 
 // Validate API Key
@@ -171,7 +181,62 @@ if (count($pathParts) >= 1) {
         $baseUrl = 'http://localhost:8001/api.php';
         $endpoint = '/' . implode('/', $pathParts);
         $serviceUrl = $baseUrl . $endpoint;
-    } elseif (isset($microservices[$service])) {
+    } elseif ($service === 'list_role') {
+        $baseUrl = 'http://localhost:8002/auth';
+        array_shift($pathParts); // Remove 'list_role' from the path parts
+        $endpoint = '/' . implode('/', $pathParts);
+    
+        // Retrieve query string if it exists
+        $queryString = http_build_query($_GET);
+        $serviceUrl = $baseUrl . $endpoint;
+    
+        // Append query string if not empty
+        if (!empty($queryString)) {
+            $serviceUrl .= '?' . $queryString;
+        }
+    } elseif ($service === 'list_role' || $service === 'del_user') {
+        $baseUrl = 'http://localhost:8002/auth';
+        array_shift($pathParts); // Remove 'list_role' from the path parts
+        $endpoint = '/' . implode('/', $pathParts);
+
+        // Retrieve query string if it exists
+        $queryString = http_build_query($_GET);
+        $serviceUrl = $baseUrl . $endpoint;
+
+        // Append query string if not empty
+        if (!empty($queryString)) {
+            $serviceUrl .= '?' . $queryString;
+        }
+    }
+    elseif ($service === 'password') {
+        $baseUrl = 'http://localhost:8002/password';
+        array_shift($pathParts); // Remove 'list_role' from the path parts
+        $endpoint = '/' . implode('/', $pathParts);
+
+        // Retrieve query string if it exists
+        $queryString = http_build_query($_GET);
+        $serviceUrl = $baseUrl . $endpoint;
+
+        // Append query string if not empty
+        if (!empty($queryString)) {
+            $serviceUrl .= '?' . $queryString;
+        }
+    }
+    elseif ($service === 'verify') {
+        $baseUrl = 'http://localhost:8002';
+        array_shift($pathParts); // Remove 'list_role' from the path parts
+        $endpoint = '/' . implode('/', $pathParts);
+
+        // Retrieve query string if it exists
+        $queryString = http_build_query($_GET);
+        $serviceUrl = $baseUrl . $endpoint;
+
+        // Append query string if not empty
+        if (!empty($queryString)) {
+            $serviceUrl .= '?' . $queryString;
+        }
+    }
+    elseif (isset($microservices[$service])) {
         $baseUrl = $microservices[$service]['base_url'];
         array_shift($pathParts);
         $endpoint = '/' . implode('/', $pathParts);
